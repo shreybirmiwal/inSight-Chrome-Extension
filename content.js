@@ -5,8 +5,10 @@ window.addEventListener("load", function() {
       
       // loop through each filtered paragraph
       for (let i = 0; i < filteredParagraphs.length; i++) {
-        const keywords = extractKeywords(filteredParagraphs[i], 4, 6);
-        console.log(keywords);
+        const keywords = extractKeywords(filteredParagraphs[i], 3, 3);
+        console.log(keywords)
+        getPicture(keywords)
+
       }
       
     }, 3000);
@@ -59,5 +61,23 @@ window.addEventListener("load", function() {
     // join 2-4 words into a string and return
     return finalWords.slice(0, maxWords).filter(function(word) {
       return word.length > 2;
-    }).slice(0, minWords).join(", ");
+    }).slice(0, minWords).join("+");
+  }
+
+
+  function getPicture(keywords){
+
+    const APIcall = "https://pixabay.com/api/?key=34376048-2f9ac2d7ccc79a73414965560&q=" + keywords + "&image_type=photo&safesearch=true&pretty=true";
+    //console.log(APIcall)
+    fetch(APIcall)
+    .then(response => response.json())
+    .then(data => 
+        
+        
+        console.log(data.hits[0].pageURL)
+    
+    )
+    .catch(error => console.error(error));
+
+
   }
