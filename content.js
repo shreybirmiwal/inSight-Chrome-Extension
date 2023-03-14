@@ -1,3 +1,12 @@
+import nltk from 'nltk';
+
+function isNoun(word) {
+  const tagged = nltk.pos_tag([word])[0][1];
+
+  return (tagged.startsWith("NN"))
+}
+
+
 window.addEventListener("load", function() {
     setTimeout(function() {
 
@@ -5,7 +14,7 @@ window.addEventListener("load", function() {
       
       // loop through each filtered paragraph
       for (let i = 0; i < filteredParagraphs.length; i++) {
-        const keywords = extractKeywords(filteredParagraphs[i], 3, 3);
+        const keywords = extractKeywords(filteredParagraphs[i], 7, 7);
         console.log(keywords)
         getPicture(keywords)
 
@@ -31,7 +40,7 @@ window.addEventListener("load", function() {
 
   function extractKeywords(text, minWords, maxWords) {
     // define stop words
-    const stopWords = ["a", "an", "here", "redirects", "other", "have", "and", "are", "as", "also", "then", "than", "at", "be", "by", "for", "from", "has", "he", "in", "is", "it", "its", "of", "on", "that", "the", "to", "was", "were", "will", "with"];
+    const stopWords = ["a", "an", "here", "redirects", "other", "site", "cookies", "have", "and", "are", "as", "also", "then", "than", "at", "be", "by", "for", "from", "has", "he", "in", "is", "it", "its", "of", "on", "that", "the", "to", "was", "were", "will", "with"];
     
     // split text into words
     const words = text.trim().split(/\s+/);
@@ -57,9 +66,13 @@ window.addEventListener("load", function() {
     const finalWords = sortedWords.filter(function(word) {
       return word.length > 2 && word.length <= 15;
     });
+
+    const nounsOnly = finalWords.filter(function(word) {
+      return isNoun(word)
+    })
     
     // join 2-4 words into a string and return
-    return finalWords.slice(0, maxWords).filter(function(word) {
+    return nounsOnly.slice(0, maxWords).filter(function(word) {
       return word.length > 2;
     }).slice(0, minWords).join("+");
   }
@@ -74,7 +87,7 @@ window.addEventListener("load", function() {
     .then(data => 
         
         
-        console.log(data.hits[0].pageURL)
+        console.log(data.hits[0].largeImageURL)
     
     )
     .catch(error => console.error(error));
