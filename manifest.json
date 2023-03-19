@@ -1,5 +1,6 @@
 {
-  "name": "visualizer",
+  "name": "inSight",
+  "description" : "Visualizer for text in articles for easy reading",
   "version": "1.0.0",
   "manifest_version": 3,
   "content_scripts": [
@@ -14,15 +15,19 @@
     "default_popup": "popup.html",
 
     "default_icon": {
-      "16": "extension_toolbar_icon16.png",
-      "32": "extension_toolbar_icon32.png"
+      "16": "bg.png",
+      "32": "bg.png"
     }
   },
+  "permissions": [
+    "storage"
+  ],
+
   "icons": {
-    "16": "extension_icon16.png",
-    "32": "extension_icon32.png",
-    "48": "extension_icon48.png",
-    "128": "extension_icon128.png"
+    "16": "bg.png",
+    "32": "bg.png",
+    "48": "bg.png",
+    "128": "bg.png"
   }
   
 }
