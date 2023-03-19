@@ -1,4 +1,36 @@
 
+const alreadyUsed = [];
+
+window.addEventListener("load", function() {
+    setTimeout(function() {
+
+
+      
+      chrome.storage.sync.get('state', function(data) {
+        if (data.state == 'on') {
+          console.log('Toggle is on');
+
+      
+          const filteredParagraphs = getText()
+          
+          // loop through each filtered paragraph
+          for (let i = 0; i < filteredParagraphs.length; i++) {
+            const keywords = extractKeywords(filteredParagraphs[i], 3, 3);
+            if(keywords != undefined)
+            getPicture(keywords)
+
+          }
+
+      } else {
+        console.log('Toggle is off');
+      }
+    });
+      
+    }, 3000);
+  });
+  
+
+  
 function isNoun(word) {
   
   var hasNumber = /\d/;   
@@ -10,27 +42,7 @@ function isNoun(word) {
   //return (tagged.startsWith("NN"))
 
   return true
-}
-
-const alreadyUsed = [];
-
-
-window.addEventListener("load", function() {
-    setTimeout(function() {
-
-      const filteredParagraphs = getText()
-      
-      // loop through each filtered paragraph
-      for (let i = 0; i < filteredParagraphs.length; i++) {
-        const keywords = extractKeywords(filteredParagraphs[i], 3, 3);
-        if(keywords != undefined)
-        getPicture(keywords)
-
-      }
-      
-    }, 3000);
-  });
-  
+  }
 
   function getText(){
     const textContent = document.body.innerText;
@@ -115,3 +127,4 @@ window.addEventListener("load", function() {
 
 
   }
+
