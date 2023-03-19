@@ -8,21 +8,22 @@ window.addEventListener("load", function() {
       
       chrome.storage.sync.get('state', function(data) {
         if (data.state == 'on') {
-          console.log('Toggle is on');
+          //console.log('Toggle is on');
 
       
           const filteredParagraphs = getText()
+          const totalPara = getPara()
           
           // loop through each filtered paragraph
           for (let i = 0; i < filteredParagraphs.length; i++) {
             const keywords = extractKeywords(filteredParagraphs[i], 3, 3);
             if(keywords != undefined)
-            getPicture(keywords)
+            getPicture(keywords, totalPara[i])
 
           }
 
       } else {
-        console.log('Toggle is off');
+        //console.log('Toggle is off');
       }
     });
       
@@ -44,9 +45,17 @@ function isNoun(word) {
   return true
   }
 
-  function getText(){
+
+  function getPara() {
     const textContent = document.body.innerText;
     const paragraphs = textContent.split("\n");
+    return paragraphs;
+  }
+
+
+  function getText(){
+
+    const paragraphs = getPara()
     const filteredParagraphs = paragraphs.filter(function(paragraph) {
       const sentences = paragraph.split(/[.!?]/);
       const filteredSentences = sentences.filter(function(sentence) {
@@ -63,7 +72,7 @@ function isNoun(word) {
     const stopWords = ["a", "an", "here", "redirects", "other", "site", "cookies", "have", "and", "are", "as", "also", "then", "than", "at", "be", "by", "for", "from", "has", "he", "in", "is", "it", "its", "of", "on", "that", "the", "to", "was", "were", "will", "with"];
     
     text = text.toLowerCase()
-    console.log(text)
+   // console.log(text)
     if(text.includes("published") || text.includes("citation") || text.includes("cookies")) return;
     
     // split text into words
@@ -101,8 +110,7 @@ function isNoun(word) {
     }).slice(0, minWords).join("+");
   }
 
-
-  function getPicture(keywords){
+  function getPicture(keywords, totalPara){
 
     const APIcall = "https://pixabay.com/api/?key=34376048-2f9ac2d7ccc79a73414965560&q=" + keywords + "&image_type=photo&safesearch=true&pretty=true";
     //console.log(APIcall)
@@ -111,10 +119,37 @@ function isNoun(word) {
     .then(data => 
         {
           if(!alreadyUsed.includes(data.hits[0].largeImageURL)){
-            console.log(keywords)
-            console.log(data.hits[0].tags)
-            console.log(data.hits[0].largeImageURL)
+           // console.log(keywords)
+          //  console.log(data.hits[0].tags)
+          //  console.log(data.hits[0].largeImageURL)
             alreadyUsed.push(data.hits[0].largeImageURL)
+
+
+            const paragraphs = document.querySelectorAll("p");
+              paragraphs.forEach(paragraph => {
+
+                //console.log(paragraph.textContent)
+                const target = totalPara
+                console.log(target)
+                
+                if (paragraph.textContent.includes(target)) {
+                  // Create the first image element
+                          var img = document.createElement("img")
+                          img.src = data.hits[0].largeImageURL
+                          img.width = 300;
+                          img.height = 300;
+
+
+                      // Create a div to hold the images
+                      const imageContainer = document.createElement("div");
+                      imageContainer.style.display = "flex"; // set flex display to align images side by side
+                      imageContainer.appendChild(img);
+                      
+                      // Insert the image container before the current paragraph
+                      paragraph.parentNode.insertBefore(imageContainer, paragraph);
+                }
+              });
+
           }
           
         }
