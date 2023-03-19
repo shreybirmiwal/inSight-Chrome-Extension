@@ -1,0 +1,27 @@
+{
+  "name": "visualize",
+  "version": "1.0.0",
+  "description": "\"# visualizer\"",
+  "main": "content.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shreybirmiwal/visualizer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shreybirmiwal/visualizer/issues"
+  },
+  "homepage": "https://github.com/shreybirmiwal/visualizer#readme",
+  "devDependencies": {
+    "@babel/core": "^7.21.3",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.2",
+    "nltk": "^0.0.1",
+    "webpack": "^5.76.1",
+    "webpack-cli": "^5.0.1"
+  }
+}

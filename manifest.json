@@ -9,5 +9,20 @@
         "content.js"
       ]
     }
-  ]
+  ],
+  "action": {
+    "default_popup": "popup.html",
+
+    "default_icon": {
+      "16": "extension_toolbar_icon16.png",
+      "32": "extension_toolbar_icon32.png"
+    }
+  },
+  "icons": {
+    "16": "extension_icon16.png",
+    "32": "extension_icon32.png",
+    "48": "extension_icon48.png",
+    "128": "extension_icon128.png"
+  }
+  
 }

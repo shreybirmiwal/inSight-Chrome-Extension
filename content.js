@@ -1,10 +1,18 @@
-import nltk from 'nltk';
 
 function isNoun(word) {
-  const tagged = nltk.pos_tag([word])[0][1];
+  
+  var hasNumber = /\d/;   
+  if(hasNumber.test(word)) return false;
+  if(word.includes("+")) return false;
+  if(word.includes("cookies")) return false;
 
-  return (tagged.startsWith("NN"))
+  //const tagged = nltk.pos_tag([word])[0][1];
+  //return (tagged.startsWith("NN"))
+
+  return true
 }
+
+const alreadyUsed = [];
 
 
 window.addEventListener("load", function() {
@@ -14,8 +22,8 @@ window.addEventListener("load", function() {
       
       // loop through each filtered paragraph
       for (let i = 0; i < filteredParagraphs.length; i++) {
-        const keywords = extractKeywords(filteredParagraphs[i], 7, 7);
-        console.log(keywords)
+        const keywords = extractKeywords(filteredParagraphs[i], 3, 3);
+        if(keywords != undefined)
         getPicture(keywords)
 
       }
@@ -41,6 +49,10 @@ window.addEventListener("load", function() {
   function extractKeywords(text, minWords, maxWords) {
     // define stop words
     const stopWords = ["a", "an", "here", "redirects", "other", "site", "cookies", "have", "and", "are", "as", "also", "then", "than", "at", "be", "by", "for", "from", "has", "he", "in", "is", "it", "its", "of", "on", "that", "the", "to", "was", "were", "will", "with"];
+    
+    text = text.toLowerCase()
+    console.log(text)
+    if(text.includes("published") || text.includes("citation") || text.includes("cookies")) return;
     
     // split text into words
     const words = text.trim().split(/\s+/);
@@ -85,12 +97,21 @@ window.addEventListener("load", function() {
     fetch(APIcall)
     .then(response => response.json())
     .then(data => 
-        
-        
-        console.log(data.hits[0].largeImageURL)
-    
+        {
+          if(!alreadyUsed.includes(data.hits[0].largeImageURL)){
+            console.log(keywords)
+            console.log(data.hits[0].tags)
+            console.log(data.hits[0].largeImageURL)
+            alreadyUsed.push(data.hits[0].largeImageURL)
+          }
+          
+        }
     )
-    .catch(error => console.error(error));
+    .catch(error => 
+      
+      console.log()
+      
+      );
 
 
   }
