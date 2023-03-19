@@ -12,13 +12,14 @@ window.addEventListener("load", function() {
 
       
           const filteredParagraphs = getText()
-          const totalPara = getPara()
-          
           // loop through each filtered paragraph
           for (let i = 0; i < filteredParagraphs.length; i++) {
             const keywords = extractKeywords(filteredParagraphs[i], 3, 3);
-            if(keywords != undefined)
-            getPicture(keywords, totalPara[i])
+            if(keywords != undefined){
+            getPicture(keywords, filteredParagraphs[i])
+            console.log(keywords)
+            //console.log(filteredParagraphs[i])
+            }
 
           }
 
@@ -46,17 +47,11 @@ function isNoun(word) {
   }
 
 
-  function getPara() {
-    const textContent = document.body.innerText;
-    const paragraphs = textContent.split("\n");
-    return paragraphs;
-  }
-
-
   function getText(){
 
-    const paragraphs = getPara()
-    const filteredParagraphs = paragraphs.filter(function(paragraph) {
+    const textContent = document.body.innerText;
+    const paragraphs = textContent.split("\n");   
+     const filteredParagraphs = paragraphs.filter(function(paragraph) {
       const sentences = paragraph.split(/[.!?]/);
       const filteredSentences = sentences.filter(function(sentence) {
         return sentence.trim().split(" ").length > 2;
@@ -112,6 +107,7 @@ function isNoun(word) {
 
   function getPicture(keywords, totalPara){
 
+    //console.log(totalPara)
     const APIcall = "https://pixabay.com/api/?key=34376048-2f9ac2d7ccc79a73414965560&q=" + keywords + "&image_type=photo&safesearch=true&pretty=true";
     //console.log(APIcall)
     fetch(APIcall)
@@ -119,25 +115,18 @@ function isNoun(word) {
     .then(data => 
         {
           if(!alreadyUsed.includes(data.hits[0].largeImageURL)){
-           // console.log(keywords)
-          //  console.log(data.hits[0].tags)
-          //  console.log(data.hits[0].largeImageURL)
+            //console.log(keywords)
+            //console.log(data.hits[0].tags)
+            //console.log(data.hits[0].largeImageURL)
+
             alreadyUsed.push(data.hits[0].largeImageURL)
 
-
-            const paragraphs = document.querySelectorAll("p");
-              paragraphs.forEach(paragraph => {
-
-                //console.log(paragraph.textContent)
-                const target = totalPara
-                console.log(target)
                 
-                if (paragraph.textContent.includes(target)) {
                   // Create the first image element
-                          var img = document.createElement("img")
-                          img.src = data.hits[0].largeImageURL
-                          img.width = 300;
-                          img.height = 300;
+                  var img = document.createElement("img")
+                  img.src = data.hits[0].largeImageURL
+                  img.width = 300;
+                  img.height = 300;
 
 
                       // Create a div to hold the images
@@ -146,10 +135,9 @@ function isNoun(word) {
                       imageContainer.appendChild(img);
                       
                       // Insert the image container before the current paragraph
-                      paragraph.parentNode.insertBefore(imageContainer, paragraph);
-                }
-              });
-
+                     // paragraph.parentNode.insertBefore(imageContainer, paragraph);
+            
+                     document.body.appendChild(img);
           }
           
         }
