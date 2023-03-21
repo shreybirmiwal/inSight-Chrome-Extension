@@ -1,11 +1,15 @@
 
 const alreadyUsed = [];
 
+const container = document.createElement('div');
+container.style.position = 'fixed';
+container.style.top = '10px';
+container.style.right = '10px';
+container.style.zIndex = '9999';
+
 window.addEventListener("load", function() {
     setTimeout(function() {
 
-
-      
       chrome.storage.sync.get('state', function(data) {
         if (data.state == 'on') {
           //console.log('Toggle is on');
@@ -18,10 +22,13 @@ window.addEventListener("load", function() {
             if(keywords != undefined){
             getPicture(keywords, filteredParagraphs[i])
             console.log(keywords)
+            
             //console.log(filteredParagraphs[i])
             }
 
           }
+          document.body.appendChild(container);
+
 
       } else {
         //console.log('Toggle is off');
@@ -31,8 +38,27 @@ window.addEventListener("load", function() {
     }, 3000);
   });
   
+  const css = `
+  body {
+    padding-top: 50px;
+  }
+  html::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 50px;
+    width: 50px;
+    background-color: white;
+  }
+`;
 
-  
+const style = document.createElement('style');
+style.innerHTML = css;
+document.head.appendChild(style);
+
+
+
 function isNoun(word) {
   
   var hasNumber = /\d/;   
@@ -133,11 +159,9 @@ function isNoun(word) {
                       const imageContainer = document.createElement("div");
                       imageContainer.style.display = "flex"; // set flex display to align images side by side
                       imageContainer.appendChild(img);
+                      container.appendChild(img);
+
                       
-                      // Insert the image container before the current paragraph
-                     // paragraph.parentNode.insertBefore(imageContainer, paragraph);
-            
-                     document.body.appendChild(img);
           }
           
         }

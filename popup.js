@@ -10,6 +10,9 @@ window.onload=function(){
             chrome.storage.sync.set({state: 'on'});
             chrome.action.setBadgeText({text: 'ON'});
           }
+          chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.reload(tabs[0].id);
+          });
         });
       });
       
