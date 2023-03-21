@@ -1,11 +1,6 @@
-
 const alreadyUsed = [];
+const containers = [];
 
-const container = document.createElement('div');
-container.style.position = 'fixed';
-container.style.top = '10px';
-container.style.right = '10px';
-container.style.zIndex = '9999';
 
 window.addEventListener("load", function() {
     setTimeout(function() {
@@ -21,14 +16,15 @@ window.addEventListener("load", function() {
             const keywords = extractKeywords(filteredParagraphs[i], 3, 3);
             if(keywords != undefined){
             getPicture(keywords, filteredParagraphs[i])
-            console.log(keywords)
-            
+            //console.log(keywords)
             //console.log(filteredParagraphs[i])
             }
 
           }
-          document.body.appendChild(container);
-
+          // Append containers to document
+          containers.forEach(container => {
+            document.body.appendChild(container);
+          });
 
       } else {
         //console.log('Toggle is off');
@@ -40,14 +36,14 @@ window.addEventListener("load", function() {
   
   const css = `
   body {
-    padding-top: 50px;
+    padding-top: ${10 + containers.length * 60}px; // Adjust the 60px value to match the spacing between images
   }
   html::before {
     content: '';
     position: fixed;
     top: 0;
     right: 0;
-    height: 50px;
+    height: ${10 + containers.length * 60}px; // Adjust the 60px value to match the spacing between images
     width: 50px;
     background-color: white;
   }
@@ -146,20 +142,22 @@ function isNoun(word) {
             //console.log(data.hits[0].largeImageURL)
 
             alreadyUsed.push(data.hits[0].largeImageURL)
-
+            
+            const container = document.createElement('div');
+            container.style.position = 'fixed';
+            container.style.top = `${10 + alreadyUsed.length * 60}px`; // Adjust the 60px value to control the spacing between images
+            container.style.right = '10px';
+            container.style.zIndex = '9999';
                 
-                  // Create the first image element
-                  var img = document.createElement("img")
-                  img.src = data.hits[0].largeImageURL
-                  img.width = 300;
-                  img.height = 300;
+            // Create the first image element
+            var img = document.createElement("img")
+            img.src = data.hits[0].largeImageURL
+            img.width = 300;
+            img.height = 300;
 
 
-                      // Create a div to hold the images
-                      const imageContainer = document.createElement("div");
-                      imageContainer.style.display = "flex"; // set flex display to align images side by side
-                      imageContainer.appendChild(img);
-                      container.appendChild(img);
+            container.appendChild(img);
+            containers.push(container);
 
                       
           }
@@ -168,7 +166,7 @@ function isNoun(word) {
     )
     .catch(error => 
       
-      console.log()
+      console.log(error)
       
       );
 
